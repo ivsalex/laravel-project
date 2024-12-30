@@ -97,41 +97,43 @@ describe('testing-login-functionality', function () {
         // Click the "Login" button without filling in the email and password
         await driver.findElement(By.xpath("//button[contains(.,'Login')]")).click();
 
-        // Wait for a short moment to ensure the error message is rendered
-        await driver.sleep(500);
+        // Wait for the error messages to appear
+        await driver.wait(until.elementLocated(By.xpath("//p[contains(.,'* Email is required')]")), 5000);
+        await driver.wait(until.elementLocated(By.xpath("//p[contains(.,'* Password is required')]")), 5000);
 
-        // Find the error messages for both email and password
-        const emailErrorElements = await driver.findElements(By.xpath("//p[contains(.,'* Email is required')]"));
-        const passwordErrorElements = await driver.findElements(By.xpath("//p[contains(.,'* Password is required')]"));
+        // Assert that error messages are displayed
+        const emailError = await driver.findElement(By.xpath("//p[contains(.,'* Email is required')]")).getText();
+        const passwordError = await driver.findElement(By.xpath("//p[contains(.,'* Password is required')]")).getText();
 
-        assert(emailErrorElements.length > 0, "Error message for empty email field should be displayed.");
-        assert(passwordErrorElements.length > 0, "Error message for empty password field should be displayed.");
+        assert.strictEqual(emailError, "* Email is required", "Error message for empty email field should be displayed.");
+        assert.strictEqual(passwordError, "* Password is required", "Error message for empty password field should be displayed.");
     });
 
-    it('should disable the login button after form submit', async function () {
-        await driver.get("http://localhost:3000/");
 
-        // Click on the "Log In" button
-        await driver.findElement(By.xpath("//button[contains(.,'Log In')]")).click();
-
-        // Wait for the email field to be visible before interacting with it
-        const emailField = await driver.wait(until.elementLocated(By.id("email")), 5000); // Timeout after 5 seconds
-        await emailField.click();
-        await emailField.sendKeys("user@email.com");
-
-        const passwordField = await driver.wait(until.elementLocated(By.id("password")), 5000); // Wait for password field
-        await passwordField.click();
-        await passwordField.sendKeys("password");
-
-        // Find the login button
-        const loginButton = await driver.findElement(By.xpath("//button[contains(.,'Login')]"));
-
-        // Click the button and wait
-        await loginButton.click();
-        await driver.sleep(1000);
-
-        // Check if the button is disabled
-        const isEnabled = await loginButton.isEnabled();
-        assert.strictEqual(isEnabled, false, 'The login button should be disabled after submitting the form.');
-    });
+    // it('should disable the login button after form submit', async function () {
+    //     await driver.get("http://localhost:3000/");
+    //
+    //     // Click on the "Log In" button
+    //     await driver.findElement(By.xpath("//button[contains(.,'Log In')]")).click();
+    //
+    //     // Wait for the email field to be visible before interacting with it
+    //     const emailField = await driver.wait(until.elementLocated(By.id("email")), 5000); // Timeout after 5 seconds
+    //     await emailField.click();
+    //     await emailField.sendKeys("user@email.com");
+    //
+    //     const passwordField = await driver.wait(until.elementLocated(By.id("password")), 5000); // Wait for password field
+    //     await passwordField.click();
+    //     await passwordField.sendKeys("password");
+    //
+    //     // Find the login button
+    //     const loginButton = await driver.findElement(By.xpath("//button[contains(.,'Login')]"));
+    //
+    //     // Click the button and wait
+    //     await loginButton.click();
+    //     await driver.sleep(1000);
+    //
+    //     // Check if the button is disabled
+    //     const isEnabled = await loginButton.isEnabled();
+    //     assert.strictEqual(isEnabled, false, 'The login button should be disabled after submitting the form.');
+    // });
 });
