@@ -11,7 +11,7 @@ describe('testing-cars-functionality', function () {
     beforeEach(async function () {
         try {
             let options = new chrome.Options();
-            options.addArguments('--headless'); // Run in headless mode on Jenkins
+            options.addArguments('--headless');
             options.addArguments('--no-sandbox');
             options.addArguments('--disable-dev-shm-usage');
 
