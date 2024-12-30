@@ -45,12 +45,14 @@ describe('testing-cars-functionality', function () {
             console.log('User is not logged in. Logging in now...');
             await driver.findElement(By.xpath("//button[contains(.,'Log In')]")).click();
 
-            // Enter email and password
-            await driver.findElement(By.id("email")).click();
-            await driver.findElement(By.id("email")).sendKeys("admin@email.com");
+            // Wait for the email field to be visible before interacting with it
+            const emailField = await driver.wait(until.elementLocated(By.id("email")), 5000); // Timeout after 5 seconds
+            await emailField.click();
+            await emailField.sendKeys("admin@email.com");
 
-            await driver.findElement(By.id("password")).click();
-            await driver.findElement(By.id("password")).sendKeys("admin");
+            const passwordField = await driver.wait(until.elementLocated(By.id("password")), 5000); // Wait for password field
+            await passwordField.click();
+            await passwordField.sendKeys("admin");
 
             await driver.findElement(By.xpath("//button[contains(.,'Login')]")).click();
 
