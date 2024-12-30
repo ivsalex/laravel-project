@@ -4,7 +4,7 @@ require('chromedriver');
 const assert = require('assert');
 
 describe('testing-login-functionality', function () {
-    this.timeout(30000);
+    this.timeout(30000); // Global timeout for all tests
     let driver;
     let vars;
 
@@ -40,10 +40,14 @@ describe('testing-login-functionality', function () {
         // Click login button
         await driver.findElement(By.xpath("//button[contains(.,'Log In')]")).click();
 
-        // Input invalid email and password
-        await driver.findElement(By.id("email")).click();
-        await driver.findElement(By.id("email")).sendKeys("wrongemail@email.com");
-        await driver.findElement(By.id("password")).sendKeys("wrongpassword");
+        // Wait for the email field to be visible before interacting with it
+        const emailField = await driver.wait(until.elementLocated(By.id("email")), 5000); // Timeout after 5 seconds
+        await emailField.click();
+        await emailField.sendKeys("wrongemail@email.com");
+
+        const passwordField = await driver.wait(until.elementLocated(By.id("password")), 5000); // Wait for password field
+        await passwordField.sendKeys("wrongpassword");
+
         await driver.findElement(By.xpath("//button[contains(.,'Login')]")).click();
 
         // Wait for error message to appear
@@ -55,20 +59,20 @@ describe('testing-login-functionality', function () {
     });
 
     it('should log in and redirect to the homepage with Profile button', async function () {
-        // Navigate to the homepage
         await driver.get("http://localhost:3000/");
 
         // Click on the "Log In" button
         await driver.findElement(By.xpath("//button[contains(.,'Log In')]")).click();
 
-        // Enter email and password
-        await driver.findElement(By.id("email")).click();
-        await driver.findElement(By.id("email")).sendKeys("admin@email.com");
+        // Wait for the email field to be visible before interacting with it
+        const emailField = await driver.wait(until.elementLocated(By.id("email")), 5000); // Timeout after 5 seconds
+        await emailField.click();
+        await emailField.sendKeys("admin@email.com");
 
-        await driver.findElement(By.id("password")).click();
-        await driver.findElement(By.id("password")).sendKeys("admin");
+        const passwordField = await driver.wait(until.elementLocated(By.id("password")), 5000); // Wait for password field
+        await passwordField.click();
+        await passwordField.sendKeys("admin");
 
-        // Click the login button
         await driver.findElement(By.xpath("//button[contains(.,'Login')]")).click();
 
         // Wait for the page to load and ensure the URL is the homepage
@@ -80,13 +84,11 @@ describe('testing-login-functionality', function () {
         const profileButton = await driver.findElement(By.xpath("//button[contains(.,'Profile')]"));
         const loginButton = await driver.findElements(By.xpath("//button[contains(.,'Log In')]"));
 
-        // Assert that the Profile button is visible and the Log In button is no longer visible
         assert(profileButton.isDisplayed(), "Profile button should be visible after login.");
         assert.strictEqual(loginButton.length, 0, "Log In button should not be visible after login.");
     });
 
     it('should show error when both email and password are not filled', async function () {
-        // Navigate to the homepage
         await driver.get("http://localhost:3000/");
 
         // Click on the "Log In" button
@@ -102,24 +104,24 @@ describe('testing-login-functionality', function () {
         const emailErrorElements = await driver.findElements(By.xpath("//p[contains(.,'* Email is required')]"));
         const passwordErrorElements = await driver.findElements(By.xpath("//p[contains(.,'* Password is required')]"));
 
-        // Assert that both error messages are displayed
         assert(emailErrorElements.length > 0, "Error message for empty email field should be displayed.");
         assert(passwordErrorElements.length > 0, "Error message for empty password field should be displayed.");
     });
 
     it('should disable the login button after form submit', async function () {
-        // Navigate to the homepage
         await driver.get("http://localhost:3000/");
 
         // Click on the "Log In" button
         await driver.findElement(By.xpath("//button[contains(.,'Log In')]")).click();
 
-        // Enter email and password
-        await driver.findElement(By.id("email")).click();
-        await driver.findElement(By.id("email")).sendKeys("user@email.com");
+        // Wait for the email field to be visible before interacting with it
+        const emailField = await driver.wait(until.elementLocated(By.id("email")), 5000); // Timeout after 5 seconds
+        await emailField.click();
+        await emailField.sendKeys("user@email.com");
 
-        await driver.findElement(By.id("password")).click();
-        await driver.findElement(By.id("password")).sendKeys("password");
+        const passwordField = await driver.wait(until.elementLocated(By.id("password")), 5000); // Wait for password field
+        await passwordField.click();
+        await passwordField.sendKeys("password");
 
         // Find the login button
         const loginButton = await driver.findElement(By.xpath("//button[contains(.,'Login')]"));
