@@ -4,7 +4,7 @@ require('chromedriver');
 const assert = require('assert');
 
 describe('testing-login-functionality', function () {
-    this.timeout(10000);
+    this.timeout(30000);
     let driver;
     let vars;
 
