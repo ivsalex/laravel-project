@@ -11,7 +11,7 @@ const Login = () => {
     });
     const navigate = useNavigate();
     const [buttonDisabled, setButtonDisabled] = useState(false);
-    const {login, errors, setErrors} = useAuth();
+    const {login, errors, setErrors} = useAuth(); // Access login function and errors from context
 
     // Handle input changes
     const handleChange = (e) => {
@@ -41,18 +41,21 @@ const Login = () => {
     ];
 
     // Login user function
-    const loginUser = async () => {
-        const {email, password} = formData;
+    const loginUser = async (email, password) => {
         try {
             const response = await login(email, password); // Await the login response
 
-            if (!response.success) {
-                // If login fails (no token), return false
-                return response.message;
+            if (response.error) {
+                // If the login fails, return "Invalid credentials" message
+                return "Invalid credentials! Please try again.";
             }
 
+            return null;  // No error, login successful
         } catch (error) {
-            return handleNetworkError(error);
+            // Handle network errors
+            const errorMessage = handleNetworkError(error);
+            setErrors({general: errorMessage});
+            return errorMessage;
         }
     };
 
@@ -85,10 +88,10 @@ const Login = () => {
 
         setButtonDisabled(true);  // Disable the button during the request
 
-        const errorMessage = await loginUser();
+        const errorMessage = await loginUser(email, password);
 
         if (errorMessage) {
-            // Handle error response (general error)
+            // If there's an error, set the general error message from the response
             setErrors({general: errorMessage});
         } else {
             // If login is successful, navigate to the homepage

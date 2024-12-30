@@ -17,7 +17,6 @@ export const AuthProvider = ({children}) => {
         if (authToken) {
             fetchProfile();
         }
-
     }, [authToken]);
 
     // Function to fetch the user's profile from the API using the authToken
@@ -46,31 +45,34 @@ export const AuthProvider = ({children}) => {
             });
 
             if (response.data.token) {
-                // Store the token in localStorage and update context
-                setAuthToken(response.data.token);
-                setIsAuthenticated(true);  // Mark user as authenticated
+                // Store the token in localStorage and update the state
+                localStorage.setItem('token', response.data.token); // Store the token in localStorage
+                setAuthToken(response.data.token);  // Update the authToken state
+                setIsAuthenticated(true);  // Mark the user as authenticated
+                return response;  // Return response with the token
             } else {
-                return {error: true, message: 'Invalid credentials! Please try again.'};
+                return {error: true, message: "Invalid credentials"};
             }
         } catch (error) {
             const errorMessage = handleNetworkError(error);
             setErrors({general: errorMessage});
-            return {error: true, message: 'An error occurred. Please try again later.'};
+            return {error: true, message: errorMessage};
         }
     };
 
     // Function to handle logging out (removes token and clears user data)
     const logout = () => {
-        localStorage.removeItem('token');
-        setAuthToken(null);
-        setIsAuthenticated(false);
-        setProfile(null);
+        localStorage.removeItem('token');  // Remove the token from localStorage
+        setAuthToken(null);  // Reset the authToken state
+        setIsAuthenticated(false);  // Mark the user as logged out
+        setProfile(null);  // Clear the user profile
     };
 
     // Provide the authentication data and functions to the rest of the app
     return (
         <AuthContext.Provider
-            value={{authToken, profile, isAuthenticated, login, logout, setProfile, errors, setErrors}}>
+            value={{authToken, profile, isAuthenticated, login, logout, setProfile, errors, setErrors}}
+        >
             {children}
         </AuthContext.Provider>
     );

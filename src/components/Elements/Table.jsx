@@ -1,9 +1,9 @@
 import React from 'react';
 import Button from "./Button";
 
-const Table = ({columns, data, onEdit, onDelete}) => {
+const Table = ({columns, data, onEdit, onDelete, dataTestId}) => {
     return (
-        <table className="min-w-full table-auto border-collapse border border-gray-300">
+        <table className={"min-w-full table-auto border-collapse border border-gray-300"} data-testid={dataTestId}>
             <thead>
             <tr className="bg-gray-100">
                 {columns.map((column, index) => (

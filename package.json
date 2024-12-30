@@ -5,17 +5,20 @@
   "dependencies": {
     "@tanstack/react-table": "^8.20.6",
     "axios": "^1.7.9",
+    "chromedriver": "^131.0.4",
     "cra-template": "1.2.0",
     "git": "^0.1.5",
+    "mocha": "^11.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "selenium-webdriver": "^4.27.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "mocha --timeout 10000 'src/selenium-tests/**/*/test.js'",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

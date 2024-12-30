@@ -37,7 +37,7 @@ const Card = ({title, fields, onSubmit, buttonText, pageType, errors, buttonDisa
                 ))}
                 {/* Display general error if it exists */}
                 {errors.general && (
-                    <div className="text-red-500 text-sm mb-4 text-center">
+                    <div className="text-red-500 text-sm mb-4 text-center" data-testid="error-message">
                         {errors.general}
                     </div>
                 )}

@@ -47,7 +47,6 @@ const Cars = () => {
             <div className="flex justify-end p-2">
                 <Button size="small" text="Add Car" onClick={() => handleModal("Add")}/>
             </div>
-
             {loading ? (
                 <div className="text-center">
                     <p>Loading...</p>
@@ -58,6 +57,7 @@ const Cars = () => {
                     data={cars}
                     onEdit={(type, car) => handleModal("Update", car)}
                     onDelete={(type, car) => handleModal("Delete", car)}
+                    dataTestId={"cars-table"}
                 />
             )}
 
