@@ -11,8 +11,9 @@ describe('testing-cars-functionality', function () {
     beforeEach(async function () {
         try {
             let options = new chrome.Options();
-            // options.addArguments('--headless');
-            // options.addArguments('--disable-gpu');
+            options.addArguments('--headless');
+            options.addArguments('--no-sandbox');
+            options.addArguments('--disable-dev-shm-usage');
 
             driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
             vars = {};
