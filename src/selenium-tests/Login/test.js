@@ -95,7 +95,8 @@ describe('testing-login-functionality', function () {
         await driver.findElement(By.xpath("//button[contains(.,'Log In')]")).click();
 
         // Click the "Login" button without filling in the email and password
-        await driver.findElement(By.xpath("//button[contains(.,'Login')]")).click();
+        const loginButton = await driver.wait(until.elementLocated(By.xpath("//button[contains(.,'Login')]")), 5000); // Wait up to 5 seconds
+        await loginButton.click();
 
         // Wait for the error messages to appear
         await driver.wait(until.elementLocated(By.xpath("//p[contains(.,'* Email is required')]")), 5000);
