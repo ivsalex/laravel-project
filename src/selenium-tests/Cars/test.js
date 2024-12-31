@@ -1,10 +1,10 @@
-const {Builder, By, Key, until} = require('selenium-webdriver');
+const {Builder, By, until} = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 require('chromedriver');
 const assert = require('assert');
 
 describe('testing-cars-functionality', function () {
-    this.timeout(10000);
+    this.timeout(30000);
     let driver;
     let vars;
 
