@@ -1,12 +1,11 @@
-const {Builder, By, Key, until} = require('selenium-webdriver');
+const {Builder, By, until} = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 require('chromedriver');
 const assert = require('assert');
 
 describe('testing-login-functionality', function () {
-    this.timeout(30000); // Global timeout for all tests
+    this.timeout(30000);
     let driver;
-    let vars;
 
     beforeEach(async function () {
         try {
@@ -16,7 +15,6 @@ describe('testing-login-functionality', function () {
             options.addArguments('--disable-dev-shm-usage');
 
             driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
-            vars = {};
         } catch (error) {
             console.error("Error initializing WebDriver:", error);
             throw error;  // Rethrow the error to ensure Mocha captures it

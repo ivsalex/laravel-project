@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect, useContext} from 'react';
+import React, {createContext, useState, useEffect, useContext, useCallback} from 'react';
 import axios from "axios";
 import {handleNetworkError} from "../utils/errorUtils";
 
@@ -10,17 +10,8 @@ export const AuthProvider = ({children}) => {
     const [profile, setProfile] = useState(null);
     const [errors, setErrors] = useState({});
 
-    useEffect(() => {
-        if (!authToken) {
-            setIsAuthenticated(false);
-        }
-        if (authToken) {
-            fetchProfile();
-        }
-    }, [authToken]);
-
     // Function to fetch the user's profile from the API using the authToken
-    const fetchProfile = async () => {
+    const fetchProfile = useCallback(async () => {
         try {
             const response = await axios.get('http://localhost/public/api/user/me', {
                 headers: {Authorization: `Bearer ${authToken}`}
@@ -34,7 +25,16 @@ export const AuthProvider = ({children}) => {
         } catch (error) {
             console.error('Error fetching profile:', error);
         }
-    };
+    }, [authToken]);
+
+    useEffect(() => {
+        if (!authToken) {
+            setIsAuthenticated(false);
+        }
+        if (authToken) {
+            fetchProfile();
+        }
+    }, [authToken, fetchProfile]);
 
     // Function to handle the login process (saving the token and updating state)
     const login = async (email, password) => {
